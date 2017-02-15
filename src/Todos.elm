@@ -16,9 +16,9 @@ import Todo
 
 -- MODEL
 
-type alias Model = 
+type alias Model =
   { todos : List Todo.Model
-  , content : String
+  , input : String
   }
 
 model : Model
@@ -29,40 +29,56 @@ model =
 
 type Msg
   = Add
-  | Change String
+  | Input String
   | Toggle Int
-
 
 update : Msg -> Model -> Model
 update msg model =
   case msg of
     Add ->
-      { model | todos = Todo.Model 1 model.content False :: model.todos
-              , content = "" }
+        let
+            newuid = case List.head model.todos of
+                Nothing ->
+                    1
+                Just value ->
+                    value.uid + 1
+        in
+            if model.input == "" then
+                model
+            else
+              { model | todos = Todo.Model newuid model.input False :: model.todos
+                      , input = "" }
 
-    Change newContent ->
-      { model | content = newContent }
+    Input input ->
+      { model | input = input }
 
     Toggle uid ->
-      model
-
+        let
+            updateTodo todo =
+                if todo.uid == uid then
+                    { todo | completed = not todo.completed }
+                else
+                    todo
+        in
+            { model | todos = List.map updateTodo model.todos }
 
 -- VIEW
 
 viewTodoItem : Todo.Model -> Html Msg
 viewTodoItem todo =
-  div [] [ text todo.text ]
+  li [ onClick (Toggle todo.uid), classList [ ("selected", todo.completed) ] ]
+     [ text todo.text ]
 
 viewAddTodo : String -> Html Msg
 viewAddTodo content =
   div []
-  [ input [ placeholder "Add Todo", onInput Change, value content ] []
+  [ input [ placeholder "Add Todo", onInput Input, value content ] []
   , button [ onClick Add ] [ text "Add" ]
   ]
 
 view : Model -> Html Msg
 view model =
   div []
-    [ viewAddTodo model.content
-    , div [] (List.map viewTodoItem model.todos)
+    [ viewAddTodo model.input
+    , ul [] (List.map viewTodoItem model.todos)
     ]

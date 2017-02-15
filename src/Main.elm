@@ -17,13 +17,13 @@ main =
 
 -- MODEL
 
-type alias Model = 
+type alias Model =
     { counter : Counter.Model
     , todos : Todos.Model
     }
 
 model : Model
-model = 
+model =
     { counter = Counter.model
     , todos = Todos.model
     }
@@ -49,7 +49,8 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-  div [] 
-    [ map (CounterMsg) (Counter.view model.counter)
-    , map (TodosMsg) (Todos.view model.todos)
+  div []
+    --[ map (CounterMsg) (Counter.view model.counter)
+    [ map (TodosMsg) (Todos.view model.todos)
+    , div [] [ text <| toString model.todos.todos]
     ]
