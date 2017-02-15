@@ -30,17 +30,21 @@ model =
 type Msg
   = Add
   | Change String
+  | Toggle Int
 
 
 update : Msg -> Model -> Model
 update msg model =
   case msg of
     Add ->
-      { model | todos = Todo.Model model.content False :: model.todos
+      { model | todos = Todo.Model 1 model.content False :: model.todos
               , content = "" }
 
     Change newContent ->
       { model | content = newContent }
+
+    Toggle uid ->
+      model
 
 
 -- VIEW

@@ -2,6 +2,7 @@ module Todo exposing (..)
 
 
 type alias Model =
-  { text : String
+  { uid : Int
+  , text : String
   , completed : Bool
   }
