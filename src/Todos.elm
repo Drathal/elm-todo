@@ -79,8 +79,8 @@ update msg model =
             in
                 { model | todos = List.map updateTodo model.todos }
 
-        Visibility filter_ ->
-            model
+        Visibility filter ->
+            { model | filter = filter }
 
 
 
@@ -101,9 +101,41 @@ viewAddTodo content =
         ]
 
 
+filterToString : Filter -> String
+filterToString filter =
+    case filter of
+        All ->
+            "All"
+
+        Completed ->
+            "Completed"
+
+        Active ->
+            "Active"
+
+
+viewVisibility : Filter -> Filter -> Html Msg
+viewVisibility current filter =
+    if filter == current then
+        span []
+            [ text (filterToString filter)
+            ]
+    else
+        a [ href "#", onClick (Visibility filter) ]
+            [ text (filterToString filter)
+            ]
+
+
+viewSetVisibility : Filter -> Html Msg
+viewSetVisibility currentfilter =
+    div []
+        (List.map (viewVisibility currentfilter) [ All, Completed, Active ])
+
+
 view : Model -> Html Msg
 view model =
     div []
         [ viewAddTodo model.input
+        , viewSetVisibility model.filter
         , ul [] (List.map viewTodoItem model.todos)
         ]
