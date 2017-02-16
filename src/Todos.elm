@@ -31,14 +31,14 @@ model =
 
 
 type Msg
-    = Add
+    = Add String
     | Toggle Int
 
 
 update : Msg -> Model -> Model
 update msg model =
     case msg of
-        Add ->
+        Add task ->
             let
                 newuid =
                     case List.head model of
@@ -48,7 +48,7 @@ update msg model =
                         Just value ->
                             value.uid + 1
             in
-                (Todo.Model newuid "HELLO" False) :: model
+                (Todo.Model newuid task False) :: model
 
         Toggle uid ->
             let
