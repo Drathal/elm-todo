@@ -7,11 +7,10 @@ module Todos
         , model
         )
 
-import Html exposing (Html, map, div, ul, input, button, text)
-import Html.Attributes exposing (placeholder, value)
+import Html exposing (Html, map, div, ul, li, input, button, text)
+import Html.Attributes exposing (placeholder, value, classList)
 import Html.Events exposing (onClick, onInput)
 import Todo
-import Debug exposing (log)
 
 
 -- MODEL
@@ -35,7 +34,7 @@ model =
 type Msg
     = Add
     | Input String
-    | TodoMsg Todo.Msg
+    | Toggle Int
 
 
 update : Msg -> Model -> Model
@@ -62,15 +61,15 @@ update msg model =
         Input input ->
             { model | input = input }
 
-        TodoMsg msg_ ->
+        Toggle uid ->
             let
-                _ =
-                    Debug.log "TODOS"
-
-                _ =
-                    Debug.log (toString msg_)
+                updateTodo todo =
+                    if todo.uid == uid then
+                        { todo | completed = not todo.completed }
+                    else
+                        todo
             in
-                model
+                { model | todos = List.map updateTodo model.todos }
 
 
 
@@ -87,7 +86,8 @@ viewAddTodo content =
 
 viewTodoItem : Todo.Model -> Html Msg
 viewTodoItem todo =
-    map (TodoMsg) (Todo.view todo)
+    li [ onClick (Toggle todo.uid), classList [ ( "selected", todo.completed ) ] ]
+       [ text todo.text]
 
 
 view : Model -> Html Msg
