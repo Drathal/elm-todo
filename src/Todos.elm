@@ -29,6 +29,7 @@ model =
     }
 
 
+
 -- UPDATE
 
 
@@ -51,8 +52,10 @@ update msg model =
                         Just value ->
                             value.uid + 1
             in
-                { model | todos = (Todo.Model newuid task False) :: model.todos
-                        , todoInput = "" }
+                { model
+                    | todos = (Todo.Model newuid task False) :: model.todos
+                    , todoInput = ""
+                }
 
         Toggle uid ->
             let
@@ -71,6 +74,7 @@ update msg model =
 
 -- VIEW
 
+
 viewAddTodo : String -> Html Msg
 viewAddTodo todoInput =
     div []
@@ -78,13 +82,13 @@ viewAddTodo todoInput =
         , button [ onClick (Add todoInput) ] [ text "Add Todo" ]
         ]
 
+
 viewTodoItem : Todo.Model -> Html Msg
 viewTodoItem todo =
     li [ onClick (Toggle todo.uid), classList [ ( "selected", todo.completed ) ] ]
         [ text todo.text ]
 
 
-view : Model -> Html Msg
 view model =
     div []
         [ viewAddTodo model.todoInput

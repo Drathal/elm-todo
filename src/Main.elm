@@ -67,6 +67,7 @@ filterTodos todos visibility =
         Visibility.Active ->
             { todos | todos = List.filter (not << .completed) todos.todos }
 
+
 view : Model -> Html Msg
 view model =
     div []
