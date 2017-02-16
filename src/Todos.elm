@@ -5,7 +5,6 @@ module Todos
         , view
         , Msg
         , model
-        , addTodo
         )
 
 import Html exposing (Html, map, div, ul, li, input, button, text)
@@ -18,16 +17,16 @@ import Todo
 
 
 type alias Model =
-    List Todo.Model
+    { todos : List Todo.Model
+    , todoInput : String
+    }
 
 
 model : Model
 model =
-    []
-
-addTodo : String -> Msg
-addTodo todo =
-    Add todo
+    { todos = []
+    , todoInput = ""
+    }
 
 
 -- UPDATE
@@ -36,6 +35,7 @@ addTodo todo =
 type Msg
     = Add String
     | Toggle Int
+    | TodoInput String
 
 
 update : Msg -> Model -> Model
@@ -44,14 +44,15 @@ update msg model =
         Add task ->
             let
                 newuid =
-                    case List.head model of
+                    case List.head model.todos of
                         Nothing ->
                             1
 
                         Just value ->
                             value.uid + 1
             in
-                (Todo.Model newuid task False) :: model
+                { model | todos = (Todo.Model newuid task False) :: model.todos
+                        , todoInput = "" }
 
         Toggle uid ->
             let
@@ -61,12 +62,21 @@ update msg model =
                     else
                         todo
             in
-                List.map updateTodo model
+                { model | todos = List.map updateTodo model.todos }
+
+        TodoInput input ->
+            { model | todoInput = input }
 
 
 
 -- VIEW
 
+viewAddTodo : String -> Html Msg
+viewAddTodo todoInput =
+    div []
+        [ input [ placeholder "Input Todo...", onInput TodoInput, value todoInput ] []
+        , button [ onClick (Add todoInput) ] [ text "Add Todo" ]
+        ]
 
 viewTodoItem : Todo.Model -> Html Msg
 viewTodoItem todo =
@@ -77,5 +87,6 @@ viewTodoItem todo =
 view : Model -> Html Msg
 view model =
     div []
-        [ ul [] (List.map viewTodoItem model)
+        [ viewAddTodo model.todoInput
+        , ul [] (List.map viewTodoItem model.todos)
         ]
