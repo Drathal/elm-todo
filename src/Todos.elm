@@ -11,6 +11,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
 import Todo
+import Visibility
 
 
 -- MODEL
@@ -19,30 +20,22 @@ import Todo
 type alias Model =
     { todos : List Todo.Model
     , input : String
-    , filter : Filter
     }
 
 
 model : Model
 model =
-    Model [] "" All
+    Model [] ""
 
 
 
 -- UPDATE
 
 
-type Filter
-    = All
-    | Completed
-    | Active
-
-
 type Msg
     = Add
     | Input String
     | Toggle Int
-    | Visibility Filter
 
 
 update : Msg -> Model -> Model
@@ -79,9 +72,6 @@ update msg model =
             in
                 { model | todos = List.map updateTodo model.todos }
 
-        Visibility filter ->
-            { model | filter = filter }
-
 
 
 -- VIEW
@@ -101,41 +91,9 @@ viewAddTodo content =
         ]
 
 
-filterToString : Filter -> String
-filterToString filter =
-    case filter of
-        All ->
-            "All"
-
-        Completed ->
-            "Completed"
-
-        Active ->
-            "Active"
-
-
-viewVisibility : Filter -> Filter -> Html Msg
-viewVisibility current filter =
-    if filter == current then
-        span []
-            [ text (filterToString filter)
-            ]
-    else
-        a [ href "#", onClick (Visibility filter) ]
-            [ text (filterToString filter)
-            ]
-
-
-viewSetVisibility : Filter -> Html Msg
-viewSetVisibility currentfilter =
-    div []
-        (List.map (viewVisibility currentfilter) [ All, Completed, Active ])
-
-
 view : Model -> Html Msg
 view model =
     div []
         [ viewAddTodo model.input
-        , viewSetVisibility model.filter
         , ul [] (List.map viewTodoItem model.todos)
         ]
