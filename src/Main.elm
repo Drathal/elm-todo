@@ -51,14 +51,16 @@ update msg model =
             ( { model | visibility = Visibility.update msg model.visibility }, Cmd.none )
 
 
+
 -- VIEW
+
 
 filterTodos : Todos.Model -> Visibility.Model -> Todos.Model
 filterTodos todos visibility =
     case visibility of
         Visibility.All ->
             todos
-        
+
         Visibility.Completed ->
             List.filter .completed todos
 

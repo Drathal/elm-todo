@@ -16,14 +16,16 @@ import Todo
 -- MODEL
 
 
-type alias Model = List Todo.Model
+type alias Model =
+    List Todo.Model
 
 
 model : Model
 model =
     [ Todo.Model 1 "Hello" False
     , Todo.Model 2 "World" False
-    , Todo.Model 3 "Meatballs" False ]
+    , Todo.Model 3 "Meatballs" False
+    ]
 
 
 
@@ -31,14 +33,14 @@ model =
 
 
 type Msg
-    = Add
+    = Add String
     | Toggle Int
 
 
 update : Msg -> Model -> Model
 update msg model =
     case msg of
-        Add ->
+        Add task ->
             let
                 newuid =
                     case List.head model of
@@ -48,7 +50,7 @@ update msg model =
                         Just value ->
                             value.uid + 1
             in
-                (Todo.Model newuid "HELLO" False) :: model
+                (Todo.Model newuid task False) :: model
 
         Toggle uid ->
             let
@@ -65,18 +67,10 @@ update msg model =
 -- VIEW
 
 
-viewAddTodo : String -> Html Msg
-viewAddTodo content =
-    div []
-        [ input [ placeholder "Add Todo", value content ] []
-        , button [ onClick Add ] [ text "Add" ]
-        ]
-
-
 viewTodoItem : Todo.Model -> Html Msg
 viewTodoItem todo =
     li [ onClick (Toggle todo.uid), classList [ ( "selected", todo.completed ) ] ]
-       [ text todo.text]
+        [ text todo.text ]
 
 
 view : Model -> Html Msg

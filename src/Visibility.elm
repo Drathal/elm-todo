@@ -48,32 +48,19 @@ update msg model =
 -- VIEW
 
 
-visibilityToString : Msg -> String
-visibilityToString visibility =
-    case visibility of
-        All ->
-            "All"
-
-        Completed ->
-            "Completed"
-
-        Active ->
-            "Active"
-
-
 viewVisibility : Msg -> Msg -> Html Msg
 viewVisibility current visibility =
     if visibility == current then
         span []
-            [ text (visibilityToString visibility)
+            [ text (toString visibility)
             ]
     else
         a [ href "#", onClick visibility ]
-            [ text (visibilityToString visibility)
+            [ text (toString visibility)
             ]
 
 
 view : Model -> Html Msg
-view currentVisibility =
+view model =
     div []
-        (List.map (viewVisibility currentVisibility) [ All, Completed, Active ])
+        (List.map (viewVisibility model) [ All, Completed, Active ])
