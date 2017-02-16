@@ -34,7 +34,7 @@ model =
 type Msg
     = Add
     | Input String
-    | Toggle Int
+    | TodoMsg Todo.Msg
 
 
 update : Msg -> Model -> Model
@@ -61,26 +61,12 @@ update msg model =
         Input input ->
             { model | input = input }
 
-        Toggle uid ->
-            let
-                updateTodo todo =
-                    if todo.uid == uid then
-                        { todo | completed = not todo.completed }
-                    else
-                        todo
-            in
-                { model | todos = List.map updateTodo model.todos }
+        TodoMsg msg_ ->
+            model
 
 
 
 -- VIEW
-
-
-viewTodoItem : Todo.Model -> Html Msg
-viewTodoItem todo =
-    li [ onClick (Toggle todo.uid), classList [ ( "selected", todo.completed ) ] ]
-        [ text todo.text ]
-
 
 viewAddTodo : String -> Html Msg
 viewAddTodo content =
@@ -88,6 +74,10 @@ viewAddTodo content =
         [ input [ placeholder "Add Todo", onInput Input, value content ] []
         , button [ onClick Add ] [ text "Add" ]
         ]
+
+viewTodoItem : Todo.Model -> Html Msg
+viewTodoItem todo =
+    Html.map (TodoMsg) (Todo.view todo)
 
 
 view : Model -> Html Msg
