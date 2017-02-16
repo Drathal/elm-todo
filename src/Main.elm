@@ -65,8 +65,8 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div []
-        --[ map (CounterMsg) (Counter.view model.counter)
-        [ map (VisibilityMsg) (Visibility.view model.visibility)
+        [ map (CounterMsg) (Counter.view model.counter)
+        , map (VisibilityMsg) (Visibility.view model.visibility)
         , map (TodosMsg) (Todos.view model.todos)
         , div [] [ text <| toString model.todos.todos ]
         , div [] [ text <| toString model.visibility ]

@@ -5,7 +5,8 @@ import Html.Attributes exposing (href)
 import Html.Events exposing (onClick)
 
 
--- Messages 
+-- Messages
+
 
 type Msg
     = All
@@ -13,30 +14,39 @@ type Msg
     | Active
 
 
+
 -- MODEL
 
-type alias Model = Msg
+
+type alias Model =
+    Msg
+
 
 model : Model
-model = All
+model =
+    All
+
 
 
 -- Update
+
 
 update : Msg -> Model -> Model
 update msg model =
     case msg of
         All ->
             All
-        
+
         Completed ->
             Completed
-        
+
         Active ->
             Active
 
 
+
 -- VIEW
+
 
 visibilityToString : Msg -> String
 visibilityToString visibility =

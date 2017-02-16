@@ -1,10 +1,12 @@
 module Todo exposing (..)
 
-import Html exposing (Html, li, text)
+import Html exposing (Html, text, li)
 import Html.Attributes exposing (classList)
 import Html.Events exposing (onClick)
 
+
 -- Model
+
 
 type alias Model =
     { uid : Int
@@ -13,7 +15,9 @@ type alias Model =
     }
 
 
+
 -- Update
+
 
 type Msg
     = Toggle Model
@@ -23,12 +27,25 @@ update : Msg -> Model -> Model
 update msg model =
     case msg of
         Toggle todo ->
-            { todo | completed = not todo.completed }
+            let
+                _ =
+                    Debug.log "HELLO"
+
+                _ =
+                    Debug.log (toString todo)
+            in
+                { todo | completed = not todo.completed }
+
 
 
 -- View
 
+
 view : Model -> Html Msg
 view todo =
-    li [ onClick (Toggle todo), classList [ ( "selected", todo.completed ) ] ]
-        [ text todo.text ]
+    li
+        [ onClick (Toggle todo)
+        , classList [ ( "selected", todo.completed ) ]
+        ]
+        [ text todo.text
+        ]

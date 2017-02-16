@@ -7,10 +7,11 @@ module Todos
         , model
         )
 
-import Html exposing (..)
-import Html.Attributes exposing (..)
+import Html exposing (Html, map, div, ul, input, button, text)
+import Html.Attributes exposing (placeholder, value)
 import Html.Events exposing (onClick, onInput)
 import Todo
+import Debug exposing (log)
 
 
 -- MODEL
@@ -62,11 +63,19 @@ update msg model =
             { model | input = input }
 
         TodoMsg msg_ ->
-            model
+            let
+                _ =
+                    Debug.log "TODOS"
+
+                _ =
+                    Debug.log (toString msg_)
+            in
+                model
 
 
 
 -- VIEW
+
 
 viewAddTodo : String -> Html Msg
 viewAddTodo content =
@@ -75,9 +84,10 @@ viewAddTodo content =
         , button [ onClick Add ] [ text "Add" ]
         ]
 
+
 viewTodoItem : Todo.Model -> Html Msg
 viewTodoItem todo =
-    Html.map (TodoMsg) (Todo.view todo)
+    map (TodoMsg) (Todo.view todo)
 
 
 view : Model -> Html Msg
