@@ -5,6 +5,7 @@ module Todos
         , view
         , Msg
         , model
+        , addTodo
         )
 
 import Html exposing (Html, map, div, ul, li, input, button, text)
@@ -22,11 +23,11 @@ type alias Model =
 
 model : Model
 model =
-    [ Todo.Model 1 "Hello" False
-    , Todo.Model 2 "World" False
-    , Todo.Model 3 "Meatballs" False
-    ]
+    []
 
+addTodo : String -> Msg
+addTodo todo =
+    Add todo
 
 
 -- UPDATE
