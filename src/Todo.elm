@@ -43,9 +43,6 @@ update msg model =
 
 view : Model -> Html Msg
 view todo =
-    li
-        [ onClick (Toggle todo)
-        , classList [ ( "selected", todo.completed ) ]
-        ]
-        [ text todo.text
-        ]
+    li [ classList [ ( "selected", todo.completed ) ] ]
+       [ text todo.text
+       ]
