@@ -53,19 +53,12 @@ update msg model =
                             value.uid + 1
             in
                 { model
-                    | todos = (Todo.Model newuid task False) :: model.todos
+                    | todos = (Todo.add newuid task) :: model.todos
                     , todoInput = ""
                 }
 
         Toggle uid ->
-            let
-                updateTodo todo =
-                    if todo.uid == uid then
-                        { todo | completed = not todo.completed }
-                    else
-                        todo
-            in
-                { model | todos = List.map updateTodo model.todos }
+            { model | todos = List.map (Todo.toggle uid) model.todos }
 
         TodoInput input ->
             { model | todoInput = input }
@@ -89,6 +82,7 @@ viewTodoItem todo =
         [ text todo.text ]
 
 
+view : Model -> Html Msg
 view model =
     div []
         [ viewAddTodo model.todoInput
