@@ -1,7 +1,6 @@
 module Main exposing (..)
 
-import Html exposing (..)
-import Counter
+import Html exposing (Html, map, div, text)
 import Todos
 import Visibility
 
@@ -21,16 +20,14 @@ main =
 
 
 type alias Model =
-    { counter : Counter.Model
-    , todos : Todos.Model
+    { todos : Todos.Model
     , visibility : Visibility.Model
     }
 
 
 model : Model
 model =
-    { counter = Counter.model
-    , todos = Todos.model
+    { todos = Todos.model
     , visibility = Visibility.model
     }
 
@@ -40,17 +37,13 @@ model =
 
 
 type Msg
-    = CounterMsg Counter.Msg
-    | TodosMsg Todos.Msg
+    = TodosMsg Todos.Msg
     | VisibilityMsg Visibility.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        CounterMsg msg ->
-            ( { model | counter = Counter.update msg model.counter }, Cmd.none )
-
         TodosMsg msg ->
             ( { model | todos = Todos.update msg model.todos }, Cmd.none )
 
@@ -58,16 +51,24 @@ update msg model =
             ( { model | visibility = Visibility.update msg model.visibility }, Cmd.none )
 
 
-
 -- VIEW
+
+filterTodos : Todos.Model -> Visibility.Model -> Todos.Model
+filterTodos todos visibility =
+    case visibility of
+        Visibility.All ->
+            todos
+        
+        Visibility.Completed ->
+            List.filter .completed todos
+
+        Visibility.Active ->
+            List.filter (not << .completed) todos
 
 
 view : Model -> Html Msg
 view model =
     div []
-        [ map (CounterMsg) (Counter.view model.counter)
-        , map (VisibilityMsg) (Visibility.view model.visibility)
-        , map (TodosMsg) (Todos.view model.todos)
-        , div [] [ text <| toString model.todos.todos ]
-        , div [] [ text <| toString model.visibility ]
+        [ map (VisibilityMsg) (Visibility.view model.visibility)
+        , map (TodosMsg) (Todos.view (filterTodos model.todos model.visibility))
         ]
