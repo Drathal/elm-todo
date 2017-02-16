@@ -2,7 +2,6 @@ module Todo exposing (..)
 
 import Html exposing (Html, text, li)
 import Html.Attributes exposing (classList)
-import Html.Events exposing (onClick)
 
 
 -- Model
