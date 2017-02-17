@@ -32,17 +32,7 @@ model =
 
 
 update : Msg -> Model -> Model
-update msg model =
-    case msg of
-        All ->
-            All
-
-        Completed ->
-            Completed
-
-        Active ->
-            Active
-
+update msg model = msg
 
 
 -- VIEW
@@ -50,7 +40,7 @@ update msg model =
 
 viewVisibility : Msg -> Msg -> Html Msg
 viewVisibility current visibility =
-    if visibility == current then
+    if current == visibility then
         span []
             [ text (toString visibility)
             ]

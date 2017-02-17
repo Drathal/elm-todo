@@ -1,6 +1,7 @@
 module Main exposing (..)
 
 import Html exposing (Html, map, div, text, input, button)
+import Todo
 import Todos
 import Visibility
 
@@ -55,22 +56,22 @@ update msg model =
 -- VIEW
 
 
-filterTodos : Todos.Model -> Visibility.Model -> Todos.Model
+filterTodos : List Todo.Model -> Visibility.Model -> List Todo.Model
 filterTodos todos visibility =
     case visibility of
         Visibility.All ->
-            { todos | todos = todos.todos }
+            todos
 
         Visibility.Completed ->
-            { todos | todos = List.filter .completed todos.todos }
+            List.filter .completed todos
 
         Visibility.Active ->
-            { todos | todos = List.filter (not << .completed) todos.todos }
+            List.filter (not << .completed) todos
 
 
 view : Model -> Html Msg
 view model =
     div []
         [ map (VisibilityMsg) (Visibility.view model.visibility)
-        , map (TodosMsg) (Todos.view (filterTodos model.todos model.visibility))
+        , map (TodosMsg) (Todos.view (Todos.Model (filterTodos model.todos.todos model.visibility) model.todos.todoInput))
         ]
