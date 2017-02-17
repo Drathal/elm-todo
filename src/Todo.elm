@@ -1,7 +1,9 @@
 module Todo exposing (..)
+
 import Html exposing (Html, li, text)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (classList)
+
 
 type alias Model =
     { uid : Int
@@ -22,9 +24,11 @@ toggle uid todo =
     else
         todo
 
-view: msg -> Model -> Html msg
+
+view : msg -> Model -> Html msg
 view msg todo =
-    li [ onClick msg
-       , classList [ ( "selected", todo.completed ) ] 
-       ]
-       [ text todo.text ]
+    li
+        [ onClick msg
+        , classList [ ( "selected", todo.completed ) ]
+        ]
+        [ text todo.text ]

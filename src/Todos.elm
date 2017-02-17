@@ -9,6 +9,7 @@ module Todos
 
 import Html exposing (Html, map, div, ul, li, input, button, text)
 import Todo
+import AddTodo
 
 
 -- MODEL
@@ -20,10 +21,7 @@ type alias Model =
 
 model : Model
 model =
-    [ Todo.Model 1 "Hello" False
-    , Todo.Model 2 "World" True
-    , Todo.Model 3 "Test" False
-    ]
+    []
 
 
 
@@ -54,8 +52,14 @@ update msg model =
             List.map (Todo.toggle uid) model
 
 
+
 -- VIEW
+
 
 view : Model -> Html Msg
 view model =
-    div [] [ ul [] (List.map (\todo -> Todo.view (Toggle todo.uid) todo) model) ]
+    div []
+        [ AddTodo.view Add
+        , ul []
+            (List.map (\todo -> Todo.view (Toggle todo.uid) todo) model)
+        ]
