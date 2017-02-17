@@ -1,6 +1,7 @@
 module Main exposing (..)
 
-import Html exposing (Html, map, div, text, input, button)
+import Html exposing (Html, map, div, section)
+import Html.Attributes exposing (class, style)
 import Todo
 import Todos
 import AddTodo
@@ -93,8 +94,16 @@ filterTodos todos visibility =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ map (VisibilityMsg) (Visibility.view model.visibility)
-        , AddTodo.view (Add model.todoinput) (Input) model.todoinput
-        , map (TodosMsg) (Todos.view (filterTodos model.todos model.visibility))
-        ]
+    let
+        completed = List.length (List.filter .completed model.todos)
+        left = List.length model.todos - completed
+        hide = List.isEmpty model.todos
+    in
+        div [ class "todomvc-wrapper" ]
+            [ section
+                [ class "todoapp" ]
+                [ AddTodo.view (Add model.todoinput) (Input) model.todoinput
+                , map (TodosMsg) (Todos.view (filterTodos model.todos model.visibility))
+                , map (VisibilityMsg) (Visibility.view model.visibility completed left hide)
+                ]
+            ]

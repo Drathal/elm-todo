@@ -7,7 +7,8 @@ module Todos
         , model
         )
 
-import Html exposing (Html, map, div, ul, li, input, button, text)
+import Html exposing (Html, ul, section, input, label, text)
+import Html.Attributes exposing (class, style, type_, name, checked, for)
 import Todo
 
 
@@ -44,7 +45,31 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ ul []
-            (List.map (\todo -> Todo.view (Toggle todo.uid) todo) model)
-        ]
+    let
+        emptylist =
+            if List.isEmpty model then
+                "hidden"
+            else
+                "visible"
+
+        allCompleted =
+            List.all .completed model
+    in
+        section
+            [ class "main"
+            , style [ ( "visibility", emptylist ) ]
+            ]
+            [ input
+                [ class "toggle-all"
+                , type_ "checkbox"
+                , name "toggle"
+                , checked allCompleted
+                ]
+                []
+            , label
+                [ for "toggle-all" ]
+                [ text "Mark all as complete" ]
+            , ul
+                [ class "todo-list" ]
+                (List.map (\todo -> Todo.view (Toggle todo.uid) todo) model)
+            ]
