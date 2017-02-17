@@ -26,8 +26,8 @@ toggle uid todo =
         todo
 
 
-view : msg -> Model -> Html msg
-view msg todo =
+view : msg -> msg -> Model -> Html msg
+view togglemsg deletemsg todo =
     li
         [ classList [ ( "completed", todo.completed ), ( "editing", todo.editing ) ] ]
         [ div
@@ -36,14 +36,16 @@ view msg todo =
                 [ class "toggle"
                 , type_ "checkbox"
                 , checked todo.completed
-                , onClick msg
+                , onClick togglemsg
                 ]
                 []
             , label
                 []
                 [ text todo.text ]
             , button
-                [ class "destory" ]
+                [ class "destroy"
+                , onClick deletemsg
+                ]
                 []
             ]
         , input

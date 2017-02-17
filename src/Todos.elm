@@ -32,6 +32,7 @@ model =
 type Msg
     = Toggle Int
     | MarkAll
+    | Delete Int
 
 
 update : Msg -> Model -> Model
@@ -46,6 +47,13 @@ update msg model =
                     { todo | completed = True }
             in
                 List.map markCompleted model
+
+        Delete uid ->
+            let
+                remove todo =
+                    todo.uid == uid
+            in
+                List.filter (not << remove) model
 
 
 
@@ -82,5 +90,5 @@ view model =
                 [ text "Mark all as complete" ]
             , ul
                 [ class "todo-list" ]
-                (List.map (\todo -> Todo.view (Toggle todo.uid) todo) model)
+                (List.map (\todo -> Todo.view (Toggle todo.uid) (Delete todo.uid) todo) model)
             ]
