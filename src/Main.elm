@@ -1,8 +1,6 @@
 module Main exposing (..)
 
 import Html exposing (Html, map, div, text, input, button)
-import Html.Attributes exposing (value, type_)
-import Html.Events exposing (onClick, onInput)
 import Todo
 import Todos
 import AddTodo
@@ -27,6 +25,7 @@ type alias Model =
     { todos : Todos.Model
     , visibility : Visibility.Model
     , todoinput : String
+    , uid : Int
     }
 
 
@@ -35,6 +34,7 @@ model =
     { todos = Todos.model
     , visibility = Visibility.model
     , todoinput = ""
+    , uid = 1
     }
 
 
@@ -62,18 +62,13 @@ update msg model =
             ( { model | todoinput = todoinput }, Cmd.none )
 
         Add task ->
-            let
-                newuid =
-                    case List.head model.todos of
-                        Nothing ->
-                            1
-
-                        Just value ->
-                            value.uid + 1
-            in
+            if task == "" then
+                ( model, Cmd.none )
+            else
                 ( { model
-                    | todos = (Todo.add newuid task) :: model.todos
+                    | todos = (Todo.add model.uid task) :: model.todos
                     , todoinput = ""
+                    , uid = model.uid + 1
                   }
                 , Cmd.none
                 )

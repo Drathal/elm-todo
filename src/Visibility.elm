@@ -18,11 +18,13 @@ type Msg
 -- MODEL
 
 
-type alias Model = Msg
+type alias Model =
+    Msg
 
 
 model : Model
-model = All
+model =
+    All
 
 
 
