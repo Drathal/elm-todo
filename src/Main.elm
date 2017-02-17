@@ -5,6 +5,7 @@ import Html.Attributes exposing (value, type_)
 import Html.Events exposing (onClick, onInput)
 import Todo
 import Todos
+import AddTodo
 import Visibility
 
 
@@ -95,18 +96,10 @@ filterTodos todos visibility =
             List.filter (not << .completed) todos
 
 
-viewAddTodo : String -> Html Msg
-viewAddTodo inputTodo =
-    div []
-        [ input [ type_ "text", onInput Input, value inputTodo ] []
-        , button [ onClick (Add inputTodo) ] [ text "Add" ]
-        ]
-
-
 view : Model -> Html Msg
 view model =
     div []
         [ map (VisibilityMsg) (Visibility.view model.visibility)
-        , viewAddTodo model.todoinput
+        , AddTodo.view (Add model.todoinput) (Input) model.todoinput
         , map (TodosMsg) (Todos.view (filterTodos model.todos model.visibility))
         ]
