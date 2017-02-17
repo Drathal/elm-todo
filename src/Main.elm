@@ -1,6 +1,8 @@
 module Main exposing (..)
 
 import Html exposing (Html, map, div, text, input, button)
+import Html.Attributes exposing (value, type_)
+import Html.Events exposing (onClick, onInput)
 import Todo
 import Todos
 import Visibility
@@ -23,6 +25,7 @@ main =
 type alias Model =
     { todos : Todos.Model
     , visibility : Visibility.Model
+    , todoinput : String
     }
 
 
@@ -30,6 +33,7 @@ model : Model
 model =
     { todos = Todos.model
     , visibility = Visibility.model
+    , todoinput = ""
     }
 
 
@@ -40,6 +44,8 @@ model =
 type Msg
     = TodosMsg Todos.Msg
     | VisibilityMsg Visibility.Msg
+    | Input String
+    | Add String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -51,12 +57,32 @@ update msg model =
         VisibilityMsg msg ->
             ( { model | visibility = Visibility.update msg model.visibility }, Cmd.none )
 
+        Input todoinput ->
+            ( { model | todoinput = todoinput }, Cmd.none )
+
+        Add task ->
+            let
+                newuid =
+                    case List.head model.todos of
+                        Nothing ->
+                            1
+
+                        Just value ->
+                            value.uid + 1
+            in
+                ( { model
+                    | todos = (Todo.add newuid task) :: model.todos
+                    , todoinput = ""
+                  }
+                , Cmd.none
+                )
+
 
 
 -- VIEW
 
 
-filterTodos : List Todo.Model -> Visibility.Model -> List Todo.Model
+filterTodos : Todos.Model -> Visibility.Model -> Todos.Model
 filterTodos todos visibility =
     case visibility of
         Visibility.All ->
@@ -69,9 +95,18 @@ filterTodos todos visibility =
             List.filter (not << .completed) todos
 
 
+viewAddTodo : String -> Html Msg
+viewAddTodo inputTodo =
+    div []
+        [ input [ type_ "text", onInput Input, value inputTodo ] []
+        , button [ onClick (Add inputTodo) ] [ text "Add" ]
+        ]
+
+
 view : Model -> Html Msg
 view model =
     div []
         [ map (VisibilityMsg) (Visibility.view model.visibility)
+        , viewAddTodo model.todoinput
         , map (TodosMsg) (Todos.view (filterTodos model.todos model.visibility))
         ]
