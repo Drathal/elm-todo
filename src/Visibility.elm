@@ -18,13 +18,11 @@ type Msg
 -- MODEL
 
 
-type alias Model =
-    Msg
+type alias Model = Msg
 
 
 model : Model
-model =
-    All
+model = All
 
 
 
@@ -54,5 +52,4 @@ viewVisibility current visibility =
 
 view : Model -> Html Msg
 view model =
-    div []
-        (List.map (viewVisibility model) [ All, Completed, Active ])
+    div [] (List.map (viewVisibility model) [ All, Completed, Active ])

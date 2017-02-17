@@ -8,8 +8,6 @@ module Todos
         )
 
 import Html exposing (Html, map, div, ul, li, input, button, text)
-import Html.Attributes exposing (placeholder, value, classList)
-import Html.Events exposing (onClick, onInput)
 import Todo
 
 
@@ -17,16 +15,15 @@ import Todo
 
 
 type alias Model =
-    { todos : List Todo.Model
-    , todoInput : String
-    }
+    List Todo.Model
 
 
 model : Model
 model =
-    { todos = []
-    , todoInput = ""
-    }
+    [ Todo.Model 1 "Hello" False
+    , Todo.Model 2 "World" True
+    , Todo.Model 3 "Test" False
+    ]
 
 
 
@@ -36,7 +33,6 @@ model =
 type Msg
     = Add String
     | Toggle Int
-    | TodoInput String
 
 
 update : Msg -> Model -> Model
@@ -45,46 +41,21 @@ update msg model =
         Add task ->
             let
                 newuid =
-                    case List.head model.todos of
+                    case List.head model of
                         Nothing ->
                             1
 
                         Just value ->
                             value.uid + 1
             in
-                { model
-                    | todos = (Todo.add newuid task) :: model.todos
-                    , todoInput = ""
-                }
+                (Todo.add newuid task) :: model
 
         Toggle uid ->
-            { model | todos = List.map (Todo.toggle uid) model.todos }
-
-        TodoInput input ->
-            { model | todoInput = input }
-
+            List.map (Todo.toggle uid) model
 
 
 -- VIEW
 
-
-viewAddTodo : String -> Html Msg
-viewAddTodo todoInput =
-    div []
-        [ input [ placeholder "Input Todo...", onInput TodoInput, value todoInput ] []
-        , button [ onClick (Add todoInput) ] [ text "Add Todo" ]
-        ]
-
-
-viewTodoItem : Todo.Model -> Html Msg
-viewTodoItem todo =
-    li [ onClick (Toggle todo.uid), classList [ ( "selected", todo.completed ) ] ]
-        [ text todo.text ]
-
-
 view : Model -> Html Msg
 view model =
-    div []
-        [ viewAddTodo model.todoInput
-        , ul [] (List.map viewTodoItem model.todos)
-        ]
+    div [] [ ul [] (List.map (\todo -> Todo.view (Toggle todo.uid) todo) model) ]

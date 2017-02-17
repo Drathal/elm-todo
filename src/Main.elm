@@ -73,5 +73,5 @@ view : Model -> Html Msg
 view model =
     div []
         [ map (VisibilityMsg) (Visibility.view model.visibility)
-        , map (TodosMsg) (Todos.view (Todos.Model (filterTodos model.todos.todos model.visibility) model.todos.todoInput))
+        , map (TodosMsg) (Todos.view (filterTodos model.todos model.visibility))
         ]
