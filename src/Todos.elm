@@ -81,10 +81,6 @@ viewTodoItem todo =
     li [ onClick (Toggle todo.uid), classList [ ( "selected", todo.completed ) ] ]
         [ text todo.text ]
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 6121219178382535251e2d59e3b1d8afa0857e7a
 view : Model -> Html Msg
 view model =
     div []
