@@ -9,6 +9,7 @@ module Todos
 
 import Html exposing (Html, ul, section, input, label, text)
 import Html.Attributes exposing (class, style, type_, name, checked, for)
+import Html.Events exposing (onClick)
 import Todo
 
 
@@ -30,6 +31,7 @@ model =
 
 type Msg
     = Toggle Int
+    | MarkAll
 
 
 update : Msg -> Model -> Model
@@ -37,6 +39,14 @@ update msg model =
     case msg of
         Toggle uid ->
             List.map (Todo.toggle uid) model
+
+        MarkAll ->
+            let
+                markCompleted todo =
+                    { todo | completed = True }
+            in
+                List.map markCompleted model
+
 
 
 
@@ -64,6 +74,7 @@ view model =
                 , type_ "checkbox"
                 , name "toggle"
                 , checked allCompleted
+                , onClick MarkAll
                 ]
                 []
             , label

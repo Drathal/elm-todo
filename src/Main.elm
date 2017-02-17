@@ -74,8 +74,6 @@ update msg model =
                 , Cmd.none
                 )
 
-
-
 -- VIEW
 
 
