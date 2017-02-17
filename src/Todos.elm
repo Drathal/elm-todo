@@ -81,6 +81,7 @@ viewTodoItem todo =
     li [ onClick (Toggle todo.uid), classList [ ( "selected", todo.completed ) ] ]
         [ text todo.text ]
 
+
 view : Model -> Html Msg
 view model =
     div []

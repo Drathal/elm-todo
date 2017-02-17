@@ -32,7 +32,9 @@ model =
 
 
 update : Msg -> Model -> Model
-update msg model = msg
+update msg model =
+    msg
+
 
 
 -- VIEW
