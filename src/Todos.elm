@@ -31,7 +31,7 @@ model =
 
 type Msg
     = Toggle Int
-    | MarkAll
+    | MarkAll Bool
     | Delete Int
 
 
@@ -41,12 +41,12 @@ update msg model =
         Toggle uid ->
             List.map (Todo.toggle uid) model
 
-        MarkAll ->
+        MarkAll allCompleted ->
             let
-                markCompleted todo =
-                    { todo | completed = True }
+                update todo =
+                    { todo | completed = allCompleted }
             in
-                List.map markCompleted model
+                List.map update model
 
         Delete uid ->
             let
@@ -82,7 +82,7 @@ view model =
                 , type_ "checkbox"
                 , name "toggle"
                 , checked allCompleted
-                , onClick MarkAll
+                , onClick (MarkAll (not allCompleted))
                 ]
                 []
             , label
