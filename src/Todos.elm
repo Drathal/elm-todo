@@ -10,6 +10,7 @@ module Todos
 import Html exposing (Html, ul, section, input, label, text)
 import Html.Attributes exposing (class, style, type_, name, checked, for)
 import Html.Events exposing (onClick)
+import Dom
 import Todo
 
 
@@ -32,7 +33,9 @@ model =
 type Msg
     = Toggle Int
     | MarkAll Bool
+    | Update Int String
     | Delete Int
+    | Edit Int Bool
 
 
 update : Msg -> Model -> Model
@@ -48,6 +51,16 @@ update msg model =
             in
                 List.map update model
 
+        Update uid task ->
+            let
+                update todo =
+                    if todo.uid == uid then
+                        { todo | text = task }
+                    else
+                        todo
+            in
+                List.map update model
+
         Delete uid ->
             let
                 remove todo =
@@ -55,6 +68,18 @@ update msg model =
             in
                 List.filter (not << remove) model
 
+        Edit uid isEditing ->
+            let
+                update todo =
+                    if todo.uid == uid then
+                        { todo | editing = isEditing }
+                    else
+                        todo
+
+                focus =
+                    Dom.focus ("todo-" ++ toString uid)
+            in
+                List.map update model
 
 
 
@@ -90,5 +115,5 @@ view model =
                 [ text "Mark all as complete" ]
             , ul
                 [ class "todo-list" ]
-                (List.map (\todo -> Todo.view (Toggle todo.uid) (Delete todo.uid) todo) model)
+                (List.map (Todo.view (Toggle) (Delete) (Edit) (Update)) model)
             ]
