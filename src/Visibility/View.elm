@@ -1,46 +1,14 @@
-module Visibility exposing (..)
+module Visibility.View exposing (..)
 
+import Msg
+import Visibility.Msg
+import Visibility.Model
 import Html exposing (..)
 import Html.Attributes exposing (href, class, hidden, classList)
 import Html.Events exposing (onClick)
 
 
--- Messages
-
-
-type Msg
-    = All
-    | Completed
-    | Active
-
-
-
--- MODEL
-
-
-type alias Model =
-    Msg
-
-
-model : Model
-model =
-    All
-
-
-
--- Update
-
-
-update : Msg -> Model -> Model
-update msg model =
-    msg
-
-
-
--- VIEW
-
-
-viewVisibility : Msg -> Msg -> Html Msg
+viewVisibility : Visibility.Msg -> Visibility.Msg -> Html Msg.Msg
 viewVisibility current visibility =
     li
         [ onClick visibility ]
@@ -48,7 +16,7 @@ viewVisibility current visibility =
             [ text (toString visibility) ]
         ]
 
-viewLeftTodos : Int -> Html Msg
+viewLeftTodos : Int -> Html Msg.Msg
 viewLeftTodos left =
     let
         item_ =
@@ -63,7 +31,7 @@ viewLeftTodos left =
             , text (item_ ++ " left")
             ]
 
-viewCompleted : Int -> Html Msg
+viewCompleted : Int -> Html Msg.Msg
 viewCompleted completed =
     button
         [ class "clear-completed"
@@ -72,7 +40,7 @@ viewCompleted completed =
         [ text ("Clear completed (" ++ toString completed ++ ")")
         ]
 
-view : Model -> Int -> Int -> Bool -> Html Msg
+view : Visibility.Model -> Int -> Int -> Bool -> Html Msg.Msg
 view model completed left hide =
     footer
         [ class "footer"
