@@ -4,7 +4,7 @@ import Model exposing (Model)
 import Msg exposing (Msg)
 import TodoList.View as TodoListView
 
-import Html exposing (Html, div, section)
+import Html exposing (Html, div, section, text)
 import Html.Attributes exposing (class, style, id)
 
 
@@ -16,5 +16,6 @@ view model =
         ]
         [ section [ id "todoapp" ]
             [ TodoListView.view model.todolist
+            , text (toString model.todolist)
             ]
         ]

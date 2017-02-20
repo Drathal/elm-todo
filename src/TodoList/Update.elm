@@ -1,23 +1,23 @@
 module TodoList.Update exposing (..)
 
 import Msg as Main exposing (..)
-import TodoList.Model as TodoList
-import TodoList.Msg as TodoListMsg
+import TodoList.Model exposing (Model)
+import TodoList.Msg exposing (..)
 
 import Todo.Model as Todo
 
 
-update : Main.Msg -> TodoList.Model -> TodoList.Model
-update msg model =
-    case msg of
-        Main.TodoListMsg todosmsg ->
-            updateTodos todosmsg model
+update : Main.Msg -> Model -> Model
+update msgFor model =
+    case msgFor of
+        Main.MsgForTodoList msg ->
+            updateTodos msg model
 
         _ ->
             model
 
-updateTodos : TodoListMsg.Msg -> TodoList.Model -> TodoList.Model
+updateTodos : TodoList.Msg -> Model -> Model
 updateTodos msg model =
     case msg of
-        TodoListMsg.Add uid task ->
+        Add uid task ->
             Todo.newTodo uid task :: model

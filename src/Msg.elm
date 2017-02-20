@@ -1,8 +1,10 @@
 module Msg exposing (..)
 
+import Todo.Msg as Todo
 import TodoList.Msg as TodoList
 
 
 type Msg
   = NoOp
-  | TodoListMsg TodoList.Msg
+  | MsgForTodo Int Todo.Msg
+  | MsgForTodoList TodoList.Msg
