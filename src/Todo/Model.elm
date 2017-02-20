@@ -4,16 +4,15 @@ module Todo.Model exposing (..)
 type alias Model =
     { uid : Int
     , name : String
-    , complete : Bool
+    , completed : Bool
     , editing : Bool
     }
-
 
 model : Model
 model =
     { uid = 1
     , name = ""
-    , complete = False
+    , completed = False
     , editing = False
     }
 

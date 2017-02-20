@@ -8,12 +8,12 @@ import Todo.Model exposing (Model)
 
 view : Model -> Html Msg
 view model =
-    li [ classList [ ( "completed", model.complete ), ( "editing", model.editing ) ] ]
+    li [ classList [ ( "completed", model.completed ), ( "editing", model.editing ) ] ]
         [ div [ class "view" ]
             [ input
                 [ class "toggle"
                 , type_ "checkbox"
-                , checked model.complete
+                , checked model.completed
                 ]
                 []
             , label []

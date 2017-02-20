@@ -5,13 +5,8 @@ import Html.Attributes exposing (class, style, type_, name, checked, for)
 import Msg exposing (Msg)
 
 import TodoList.Model exposing (Model)
-import Todo.Model
 import Todo.View.TodoListItem as TodoView
 
-viewTodo : Todo.Model.Model -> Html Msg
-viewTodo model =
-    li []
-        [ text model.name ]
 
 view : Model -> Html Msg
 view model =
@@ -23,7 +18,7 @@ view model =
                 "visible"
 
         allCompleted =
-            List.all .complete model
+            List.all .completed model
     in
         section
             [ class "main"

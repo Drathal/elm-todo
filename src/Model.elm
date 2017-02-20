@@ -1,7 +1,6 @@
 module Model exposing (..)
 
 import TodoList.Model as TodoList
-
 import Todo.Model
 
 type alias Model =
